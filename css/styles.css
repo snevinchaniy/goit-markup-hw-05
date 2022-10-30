@@ -32,6 +32,7 @@
   --border-cards-gray: #eeeeee;
   --bgrd-hero: #c4c4c4;
   --icon-color: #afb1b8;
+  --time-distribution: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Скидання стилів */
@@ -137,6 +138,8 @@ body {
   line-height: 1.14;
   letter-spacing: 0.02em;
   text-decoration: none;
+
+  transition: color var(--time-distribution);
 }
 
 /* Шапка навігація */
@@ -149,12 +152,24 @@ body {
 }
 
 .header-navigation .link.current {
+  position: relative;
   color: var(--brand-color);
 }
 
 .header-navigation .link:hover,
 .header-navigation .link:focus {
   color: var(--brand-color);
+}
+
+.link.current::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 4px;
+  bottom: -1px;
+  border-radius: 2px;
+  background-color: var(--brand-color);
 }
 /* Шапка контакти */
 
@@ -240,6 +255,8 @@ body {
   font-size: 16px;
   line-height: 1.88;
   letter-spacing: 0.06em;
+
+  transition: background-color var(--time-distribution), box-shadow var(--time-distribution);
 }
 
 .hero-button:hover,
@@ -324,7 +341,27 @@ body {
 }
 
 .work-list .item {
+  position: relative;
   flex-basis: calc((100% - 60px) / 3);
+}
+
+.work-box {
+  position: absolute;
+  width: 100%;
+  height: 70px;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--white-base);
+  background-color: rgba(47, 48, 58, 0.8);
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.14;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 /* Команда */
@@ -391,10 +428,13 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+
+  transition: background-color var(--time-distribution);
 }
 
 .social-icon {
   fill: var(--icon-color);
+  transition: fill var(--time-distribution), transform var(--time-distribution);
 }
 
 .social-link:hover,
@@ -427,10 +467,13 @@ body {
   height: 100%;
   border: 1px solid var(--icon-color);
   border-radius: 4px;
+
+  transition: border-color var(--time-distribution);
 }
 
 .client-icon {
   fill: var(--icon-color);
+  transition: fill var(--time-distribution);
 }
 
 .client-link:hover,
@@ -474,6 +517,8 @@ body {
   font-size: 14px;
   line-height: 1.71;
   text-decoration: none;
+
+  transition: color var(--time-distribution);
 }
 
 .maps-link {
@@ -506,6 +551,8 @@ body {
   height: 100%;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
+
+  transition: background-color var(--time-distribution);
 }
 
 .footer-social-icon {
@@ -541,6 +588,9 @@ body {
 
   border: none;
   border-radius: 4px;
+
+  transition: background-color var(--time-distribution), color var(--time-distribution),
+    box-shadow var(--time-distribution);
 }
 
 .button-all {
@@ -568,10 +618,36 @@ body {
   gap: 30px;
 }
 
-.cards-list .item {
+.cards-item {
   flex-basis: calc((100% - 60px) / 3);
+}
 
-  /* background-color: var(--white-base); */
+.cards-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.cards-overlay-text {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  padding: 63px 24px;
+
+  color: var(--white-base);
+  background-color: rgba(33, 150, 243, 0.9);
+
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.56;
+
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform var(--time-distribution), opacity var(--time-distribution);
+}
+
+.cards-item:hover .cards-overlay-text {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .cards-link {
@@ -582,6 +658,8 @@ body {
   font-size: 16px;
   line-height: 1.88;
   text-decoration: none;
+
+  transition: box-shadow var(--time-distribution);
 }
 
 .cards-link:hover,
@@ -606,4 +684,73 @@ body {
 
 .cards-text {
   color: var(--txt-secondary);
+}
+
+/* Модальне вікно */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  transition: opacity var(--time-distribution), visibility var(--time-distribution);
+}
+
+.backdrop.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1) rotate(0);
+
+  min-width: 528px;
+  min-height: 581px;
+
+  background-color: var(--white-base);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+
+  transition: transform var(--time-distribution);
+}
+
+.backdrop.is-hidden .modal-window {
+  transform: translate(-50%, -50%) scale(0) rotate(180deg);
+}
+
+.modal-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 50%;
+
+  background-color: var(--white-base);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-close-icon {
+  fill: var(--black);
+  transform: rotate(0);
+
+  transition: fill var(--time-distribution), transform var(--time-distribution);
+}
+
+.modal-close-icon:hover,
+.modal-close-icon:focus {
+  fill: var(--brand-color);
+  transform: rotate(90deg);
 }
